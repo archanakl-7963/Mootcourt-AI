@@ -1,0 +1,32 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Databases
+*.db
+mootcourt.db
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+dist/
+
+# Logs
+*.log
+logs/
+
+# Frontend Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
