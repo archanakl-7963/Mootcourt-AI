@@ -103,7 +103,7 @@ async def upload_profile_image(file: UploadFile = File(...), user_id: str = Form
     try:
         # Create static avatars directory inside backend directory
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        avatars_dir = os.path.join(base_dir, "app", "static", "avatars")
+        avatars_dir = os.path.join(base_dir, "static", "avatars")
         os.makedirs(avatars_dir, exist_ok=True)
         
         file_ext = os.path.splitext(file.filename)[1]
