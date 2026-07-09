@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     project_name: str = "Moot Court AI"
     debug: bool = False
     gemini_api_key: str = ""
-    llm_provider: str = "ollama"
+    llm_provider: str = "gemini"
     ollama_url: str = "http://localhost:11434"
     ollama_model: str = "phi3"
     ollama_embedding_model: str = "nomic-embed-text"
