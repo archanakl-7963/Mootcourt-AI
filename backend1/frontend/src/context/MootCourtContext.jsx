@@ -279,7 +279,7 @@ export const MootCourtProvider = ({ children }) => {
         ]);
         
         setIsUploading(false);
-        return { success: True, message: data.message };
+        return { success: true, message: data.message };
       } else {
         setIsUploading(false);
         return { success: false, message: data.message || "Failed to process PDF." };
