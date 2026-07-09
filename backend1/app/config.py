@@ -2,8 +2,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    project_name: str
-    debug: bool
+    project_name: str = "Moot Court AI"
+    debug: bool = False
     gemini_api_key: str = ""
     llm_provider: str = "ollama"
     ollama_url: str = "http://localhost:11434"
