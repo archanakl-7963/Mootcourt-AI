@@ -5,17 +5,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+# Set up a new user with UID 1000 for Hugging Face compatibility
+RUN useradd -m -u 1000 user
 WORKDIR /app
 
-# Copy requirements from backend subdirectory
-COPY backend1/requirements.txt .
+# Copy requirements and install
+COPY --chown=1000:1000 backend1/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all backend source files
-COPY backend1/ .
+# Copy all source files with user ownership
+COPY --chown=1000:1000 backend1/ .
 
-# Ensure static directories exist
-RUN mkdir -p /app/app/static/avatars
+# Ensure static uploads folders exist and are writeable by user 1000
+RUN mkdir -p /app/app/static/avatars && chown -R user:user /app
+
+# Switch to the non-privileged user
+USER user
 
 # Expose port (Hugging Face Spaces uses 7860 by default)
 EXPOSE 7860
