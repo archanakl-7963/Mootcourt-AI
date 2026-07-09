@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter, UploadFile, File, Header, HTTPException, Form
+from fastapi import APIRouter, UploadFile, File, Header, HTTPException, Form, BackgroundTasks
 from app.services.pdf_service import extract_text
 from app.memory.document_memory import save_document
 from app.embeddings.embedding_service import generate_embedding
@@ -9,8 +9,19 @@ from app.logger import logger
 
 router = APIRouter()
 
+def index_document_in_background(chunks: list, user_id: str):
+    try:
+        logger.info(f"Starting background indexing of {len(chunks)} chunks for user {user_id}")
+        for chunk in chunks:
+            if chunk.strip():
+                embedding = generate_embedding(chunk)
+                add_document(chunk, embedding, user_id)
+        logger.info(f"Background indexing completed successfully for user {user_id}")
+    except Exception as e:
+        logger.exception("Failed during background indexing task")
+
 @router.post("/upload-pdf")
-async def upload_pdf(file: UploadFile = File(...), user_id: str = Form(...)):
+async def upload_pdf(file: UploadFile = File(...), user_id: str = Form(...), background_tasks: BackgroundTasks = None):
     try:
         file.file.seek(0)
         text = extract_text(file.file)
@@ -24,22 +35,22 @@ async def upload_pdf(file: UploadFile = File(...), user_id: str = Form(...)):
         # Split the PDF into chunks
         chunks = text.split("\n\n")
 
-        # Generate an embedding for each chunk and tag with user_id
-        for chunk in chunks:
-            if chunk.strip():
-                embedding = generate_embedding(chunk)
-                add_document(chunk, embedding, user_id)
-
-        # Save to SQLite database
+        # Save to SQLite database (so it appears in the library immediately)
         doc_id = str(uuid.uuid4().hex)
         add_document_record(doc_id, user_id, file.filename, text)
 
         # Save to local session backup
         save_document(text)
 
+        # Run embedding indexing in the background to prevent timeout
+        if background_tasks:
+            background_tasks.add_task(index_document_in_background, chunks, user_id)
+        else:
+            index_document_in_background(chunks, user_id)
+
         return {
             "success": True,
-            "message": "PDF uploaded successfully.",
+            "message": "PDF uploaded successfully. Case indexing is running in the background.",
             "data": {
                 "characters": len(text),
                 "chunks": len(chunks)
