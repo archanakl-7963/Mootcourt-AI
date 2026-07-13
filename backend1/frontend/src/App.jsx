@@ -6,7 +6,6 @@ import BriefingLab from './components/BriefingLab';
 import JudgeSimulation from './components/JudgeSimulation';
 import UploadPDF from './components/UploadPDF';
 import ProfessorDashboard from './components/ProfessorDashboard';
-import AdminDashboard from './components/AdminDashboard';
 import Login from './components/Login';
 
 function DashboardShell() {
@@ -19,9 +18,6 @@ function DashboardShell() {
   const renderActiveContent = () => {
     if (userRole === 'professor') {
       return <ProfessorDashboard />;
-    }
-    if (userRole === 'admin' && activeTab === 'admin') {
-      return <AdminDashboard />;
     }
     switch (activeTab) {
       case 'home':

@@ -46,28 +46,9 @@ def init_db():
             course TEXT,
             college TEXT,
             profile_image TEXT,
-            is_active INTEGER DEFAULT 1,
-            is_admin INTEGER DEFAULT 0,
             created_at TEXT NOT NULL
         )
     """)
-
-    # Migration: add is_active and is_admin columns to existing users tables
-    try:
-        cursor.execute("ALTER TABLE users ADD COLUMN is_active INTEGER DEFAULT 1")
-    except sqlite3.OperationalError:
-        pass
-        
-    try:
-        cursor.execute("ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0")
-    except sqlite3.OperationalError:
-        pass
-
-    # Bootstrap: Auto-promote username 'admin' to administrator status
-    try:
-        cursor.execute("UPDATE users SET is_admin = 1 WHERE username = 'admin'")
-    except Exception:
-        pass
     
     # Create sessions table
     cursor.execute("""
@@ -273,25 +254,3 @@ def list_all_student_scores():
     rows = cursor.fetchall()
     conn.close()
     return [dict(row) for row in rows]
-
-def list_all_users():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT id, username, full_name, course, college, is_active, is_admin, created_at FROM users ORDER BY created_at DESC")
-    rows = cursor.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
-
-def set_user_active_status(user_id: str, is_active: int):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE users SET is_active = ? WHERE id = ?", (is_active, user_id))
-    conn.commit()
-    conn.close()
-
-def set_user_admin_status(user_id: str, is_admin: int):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE users SET is_admin = ? WHERE id = ?", (is_admin, user_id))
-    conn.commit()
-    conn.close()

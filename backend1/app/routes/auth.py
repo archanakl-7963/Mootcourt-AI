@@ -1,9 +1,9 @@
 import uuid
 import hashlib
 import os
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Header
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
-from app.database import create_user, get_user_by_username, get_db_connection, list_all_users, set_user_active_status, set_user_admin_status
+from app.database import create_user, get_user_by_username, get_db_connection
 from app.logger import logger
 
 router = APIRouter()
@@ -74,10 +74,6 @@ def login(req: UserLoginRequest):
         if not user:
             raise HTTPException(status_code=401, detail="Invalid username or password.")
             
-        # Check active status
-        if user.get("is_active") == 0:
-            raise HTTPException(status_code=403, detail="Your account has been deactivated. Please contact the administrator.")
-
         # Verify password
         target_hash, _ = hash_password(password, user["salt"])
         if target_hash != user["password_hash"]:
@@ -93,8 +89,7 @@ def login(req: UserLoginRequest):
                 "fullName": user.get("full_name") or user["username"],
                 "course": user.get("course") or "LLB Student",
                 "college": user.get("college") or "Law School",
-                "profileImage": user.get("profile_image"),
-                "is_admin": user.get("is_admin") or 0
+                "profileImage": user.get("profile_image")
             }
         }
     except HTTPException:
@@ -139,62 +134,3 @@ async def upload_profile_image(file: UploadFile = File(...), user_id: str = Form
     except Exception as e:
         logger.exception("Failed to process profile image upload")
         raise HTTPException(status_code=500, detail=f"Image upload failed: {str(e)}")
-
-# Helper function to check if the caller is an admin
-def verify_admin(x_user_id: str):
-    if not x_user_id:
-        raise HTTPException(status_code=401, detail="Header X-User-Id missing")
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT is_admin FROM users WHERE id = ?", (x_user_id,))
-    row = cursor.fetchone()
-    conn.close()
-    if not row or not row["is_admin"]:
-        raise HTTPException(status_code=403, detail="Admin permissions required.")
-
-class StatusRequest(BaseModel):
-    is_active: int
-
-class AdminRequest(BaseModel):
-    is_admin: int
-
-@router.get("/admin/users")
-def get_all_users(x_user_id: str = Header(None)):
-    verify_admin(x_user_id)
-    try:
-        users = list_all_users()
-        return {
-            "success": True,
-            "users": users
-        }
-    except Exception as e:
-        logger.exception("Failed to retrieve users list")
-        raise HTTPException(status_code=500, detail="Failed to fetch users list.")
-
-@router.post("/admin/users/{target_id}/status")
-def toggle_user_active(target_id: str, req: StatusRequest, x_user_id: str = Header(None)):
-    verify_admin(x_user_id)
-    try:
-        set_user_active_status(target_id, req.is_active)
-        logger.info(f"Admin {x_user_id} updated user {target_id} is_active to {req.is_active}")
-        return {
-            "success": True,
-            "message": "User status updated successfully."
-        }
-    except Exception as e:
-        logger.exception("Failed to update user status")
-        raise HTTPException(status_code=500, detail="Failed to update user status.")
-
-@router.post("/admin/users/{target_id}/admin")
-def toggle_user_admin(target_id: str, req: AdminRequest, x_user_id: str = Header(None)):
-    verify_admin(x_user_id)
-    try:
-        set_user_admin_status(target_id, req.is_admin)
-        logger.info(f"Admin {x_user_id} updated user {target_id} is_admin to {req.is_admin}")
-        return {
-            "success": True,
-            "message": "User admin privileges updated successfully."
-        }
-    except Exception as e:
-        logger.exception("Failed to update user admin status")
-        raise HTTPException(status_code=500, detail="Failed to update user admin status.")
