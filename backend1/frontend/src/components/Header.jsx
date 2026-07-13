@@ -24,6 +24,9 @@ const Header = () => {
     { id: 'briefing', label: 'Briefing Lab' },
     { id: 'judge', label: 'Courtroom Practice' },
     { id: 'sessions', label: 'Pleadings Archive' }
+  ] : userRole === 'admin' ? [
+    { id: 'home', label: 'Home' },
+    { id: 'admin', label: 'Admin Console' }
   ] : [
     { id: 'home', label: 'Home' },
     { id: 'professor', label: 'Professor Portal' }

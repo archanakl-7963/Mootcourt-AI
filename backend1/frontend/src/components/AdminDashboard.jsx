@@ -169,7 +169,7 @@ const AdminDashboard = () => {
         marginBottom: '24px'
       }}>
         {/* Card 1: Total */}
-        <div className="glass-panel animate-slide-up" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ padding: '10px', borderRadius: '8px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-glass)', color: '#ffffff' }}>
             <Users size={20} />
           </div>
@@ -180,7 +180,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Card 2: Active */}
-        <div className="glass-panel animate-slide-up" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ padding: '10px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)', color: 'var(--color-success)' }}>
             <UserCheck size={20} />
           </div>
@@ -191,7 +191,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Card 3: Deactivated */}
-        <div className="glass-panel animate-slide-up" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ padding: '10px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', color: 'var(--color-danger)' }}>
             <UserX size={20} />
           </div>
@@ -202,7 +202,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Card 4: Admins */}
-        <div className="glass-panel animate-slide-up" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ padding: '10px', borderRadius: '8px', background: 'rgba(212, 175, 55, 0.08)', border: '1px solid rgba(212, 175, 55, 0.2)', color: 'var(--color-gold)' }}>
             <Shield size={20} />
           </div>
