@@ -30,10 +30,26 @@ const ChatBox = () => {
   };
 
   const suggestions = [
-    "Critique our legal standing in this case.",
-    "Draft a skeleton argument structure for the Applicant.",
-    "What are the major loopholes or risks in the facts of the case?",
-    "Generate relevant case precedents or statutory citations."
+    {
+      title: "Statutory Analysis",
+      desc: "Examine statutory provisions and relevant acts for this case.",
+      prompt: "Analyze the uploaded case files and summarize all relevant statutory provisions, acts, and specific legal sections involved in this dispute."
+    },
+    {
+      title: "Precedent Research",
+      desc: "Retrieve key Indian Supreme Court case laws and precedents.",
+      prompt: "Examine key Indian Supreme Court case laws and historical precedents that are highly relevant to the facts and issues in this dispute."
+    },
+    {
+      title: "Petitioner Pleadings",
+      desc: "Draft a structured Summary of Arguments for the Petitioner.",
+      prompt: "Draft a structured, formal Summary of Arguments on behalf of the Petitioner/Plaintiff based on the case brief facts."
+    },
+    {
+      title: "Respondent Pleadings",
+      desc: "Draft a structured Summary of Arguments for the Respondent.",
+      prompt: "Draft a structured, formal Summary of Arguments on behalf of the Respondent/Defendant based on the case brief facts."
+    }
   ];
 
   return (
@@ -66,18 +82,44 @@ const ChatBox = () => {
       </div>
 
       {messages.length <= 1 && (
-        <div style={{ padding: '0 8px 12px 8px' }}>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: '500' }}>
-            SUGGESTED ENQUIRIES
+        <div style={{ padding: '0 16px 20px 16px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', marginBottom: '16px' }}>
+          <p style={{ fontSize: '0.72rem', color: 'var(--color-gold)', marginBottom: '12px', fontWeight: '700', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            ⚖️ Select a Formal Legal Inquiry to Begin
           </p>
-          <div className="suggestions-container">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '12px'
+          }}>
             {suggestions.map((s, idx) => (
               <div 
                 key={idx} 
-                className="suggestion-pill"
-                onClick={() => setInputValue(s)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRadius: '8px',
+                  padding: '16px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '6px',
+                  textAlign: 'left'
+                }}
+                className="action-card-hover"
+                onClick={() => {
+                  sendChatMessage(s.prompt);
+                }}
               >
-                {s}
+                <div style={{ color: 'var(--color-gold)', fontSize: '0.88rem', fontWeight: '700' }}>
+                  {s.title}
+                </div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', lineHeight: '1.35', margin: 0 }}>
+                  {s.desc}
+                </div>
+                <div style={{ color: 'var(--color-gold)', fontSize: '0.7rem', fontWeight: '600', alignSelf: 'flex-end', marginTop: '6px' }}>
+                  Execute Query ➔
+                </div>
               </div>
             ))}
           </div>

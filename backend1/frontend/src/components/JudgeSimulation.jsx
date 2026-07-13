@@ -506,47 +506,81 @@ const JudgeSimulation = () => {
         </div>
       </div>
 
-      {/* Message Stage */}
-      <div className="courtroom-stage" style={{ marginBottom: '24px' }}>
-        <div className="glass-panel-header" style={{ marginBottom: '0' }}>
-          <h3 className="panel-title" style={{ fontSize: '1rem' }}>
-            <Scale size={16} />
-            Courtroom Dialogue Record
-          </h3>
+      {/* Courtroom Work Area: Chat Dialogue and Etiquette Sidebar side-by-side */}
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '24px' }}>
+        {/* Left: Message Stage */}
+        <div className="courtroom-stage" style={{ marginBottom: 0, display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <div className="glass-panel-header" style={{ marginBottom: '0' }}>
+            <h3 className="panel-title" style={{ fontSize: '1rem' }}>
+              <Scale size={16} />
+              Courtroom Dialogue Record
+            </h3>
+          </div>
+
+          <div style={{ height: '360px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', padding: '20px' }}>
+            {judgeMessages.map((msg) => (
+              <Message key={msg.id} message={msg} />
+            ))}
+            {isJudgeEvaluating && (
+              <div className="message-wrapper assistant">
+                <div className="avatar assistant">
+                  <RefreshCw className="animate-spin" size={18} />
+                </div>
+                <div className="message-bubble" style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  Evaluating your legal pleadings and preparing rebuttal...
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+          <div className="courtroom-podium"></div>
         </div>
 
-        <div style={{ height: '360px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', padding: '20px' }}>
-          {judgeMessages.map((msg) => (
-            <Message key={msg.id} message={msg} />
-          ))}
-          {isJudgeEvaluating && (
-            <div className="message-wrapper assistant">
-              <div className="avatar assistant">
-                <RefreshCw className="animate-spin" size={18} />
+        {/* Right: Collapsible Etiquette & Protocol Reference */}
+        <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '20px', justifyContent: 'space-between' }}>
+          <div>
+            <h4 style={{ fontSize: '0.85rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--border-glass)', paddingBottom: '8px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <BookOpen size={14} /> Court Etiquette & Protocol
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '280px', overflowY: 'auto', paddingRight: '4px' }}>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                <span style={{ fontWeight: '700', color: '#ffffff', display: 'block', marginBottom: '2px' }}>Formal Address</span>
+                Begin your response with: <br />
+                <code style={{ background: 'rgba(255,255,255,0.05)', padding: '2px 4px', borderRadius: '4px', color: 'var(--color-gold)', fontSize: '0.72rem' }}>"May it please the Court, my submissions are..."</code>
               </div>
-              <div className="message-bubble" style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                Evaluating your legal pleadings and preparing rebuttal...
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                <span style={{ fontWeight: '700', color: '#ffffff', display: 'block', marginBottom: '2px' }}>Introducing Arguments</span>
+                Use standard legal phrasing: <br />
+                <code style={{ background: 'rgba(255,255,255,0.05)', padding: '2px 4px', borderRadius: '4px', color: 'var(--color-gold)', fontSize: '0.72rem' }}>"We humbly submit that..."</code> or <br />
+                <code style={{ background: 'rgba(255,255,255,0.05)', padding: '2px 4px', borderRadius: '4px', color: 'var(--color-gold)', fontSize: '0.72rem' }}>"It is the contention of the Counsel that..."</code>
+              </div>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                <span style={{ fontWeight: '700', color: '#ffffff', display: 'block', marginBottom: '2px' }}>Responding to Judges</span>
+                Always be respectful under pushback: <br />
+                <code style={{ background: 'rgba(255,255,255,0.05)', padding: '2px 4px', borderRadius: '4px', color: 'var(--color-gold)', fontSize: '0.72rem' }}>"Respectfully, My Lord, our position is..."</code>
               </div>
             </div>
-          )}
-          <div ref={messagesEndRef} />
+          </div>
+          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border-glass)', paddingTop: '10px', marginTop: '10px' }}>
+            💡 Tip: Cite legal provisions and precedents to support your arguments.
+          </div>
         </div>
-        <div className="courtroom-podium"></div>
       </div>
 
       {/* Input panel & End session */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
         {/* Chat input box */}
-        <div className="glass-panel" style={{ padding: '20px' }}>
-          <div className="chat-input-container" style={{ padding: '12px' }}>
+        <div className="glass-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
+          <div className="chat-input-container" style={{ padding: '12px', flex: 1 }}>
             <textarea
               className="chat-input"
               placeholder={activeSession.mode === 'judge' ? "May it please the Court, addressing the Judge's concern..." : "Counsel, my rebuttal is as follows..."}
-              rows={3}
+              rows={2}
               value={argumentInput}
               onChange={(e) => setArgumentInput(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={isJudgeEvaluating}
+              style={{ minHeight: '60px' }}
             />
             <button
               className="chat-send-btn"
@@ -565,39 +599,37 @@ const JudgeSimulation = () => {
           style={{ 
             borderColor: 'var(--color-gold)', 
             display: 'flex', 
-            flexDirection: 'column', 
-            justifyContent: 'center', 
+            flexDirection: 'row', 
+            justifyContent: 'space-between', 
             alignItems: 'center', 
             gap: '16px', 
-            padding: '24px',
-            textAlign: 'center' 
+            padding: '20px',
+            textAlign: 'left' 
           }}
         >
-          <div className="avatar assistant" style={{ background: 'rgba(212, 175, 55, 0.1)', color: 'var(--color-gold)', width: '48px', height: '48px' }}>
-            <Trophy size={24} />
-          </div>
-          <div>
-            <h4 style={{ fontWeight: '700', fontSize: '1rem', color: 'var(--text-primary)' }}>Conclude Proceedings</h4>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px', maxWidth: '280px' }}>
-              Submit the entire session transcript to the AI panel. You will receive an official scorecard and a detailed grading report.
-            </p>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <div className="avatar assistant" style={{ background: 'rgba(212, 175, 55, 0.1)', color: 'var(--color-gold)', width: '40px', height: '40px', flexShrink: 0 }}>
+              <Trophy size={20} />
+            </div>
+            <div>
+              <h4 style={{ fontWeight: '700', fontSize: '0.9rem', color: 'var(--text-primary)', margin: 0 }}>Conclude Proceedings</h4>
+              <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '2px', margin: 0, maxWidth: '180px' }}>
+                Submit transcript to receive your scorecard.
+              </p>
+            </div>
           </div>
           <button 
             className="btn btn-primary"
-            style={{ width: '100%', justifyContent: 'center', padding: '10px' }}
+            style={{ padding: '10px 16px', fontSize: '0.85rem', flexShrink: 0 }}
             onClick={endSimulationSession}
             disabled={isJudgeEvaluating || judgeMessages.length < 2}
             title={judgeMessages.length < 2 ? "Please send at least one argument first" : ""}
           >
             {isJudgeEvaluating ? (
-              <>
-                <RefreshCw className="animate-spin" size={16} />
-                Drafting Scorecard...
-              </>
+              <RefreshCw className="animate-spin" size={14} />
             ) : (
               <>
-                <Award size={16} />
-                Submit and Scrutinize
+                <Award size={14} /> Scorecard
               </>
             )}
           </button>

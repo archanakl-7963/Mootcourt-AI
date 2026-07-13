@@ -379,156 +379,131 @@ const HomeView = () => {
         </div>
       </div>
 
-      {/* 3. Action Cards Grid */}
+      {/* 3. Court Preparation Timeline */}
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
-        gap: '20px'
+        background: '#07101f',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '16px',
+        padding: '30px 40px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px'
       }}>
-        {/* Card 1: Upload */}
-        <div 
-          onClick={() => handleAction('documents')}
-          style={{
-            background: 'rgba(25, 118, 210, 0.04)',
-            border: '1px solid rgba(25, 118, 210, 0.15)',
-            borderRadius: '12px',
-            padding: '24px',
-            cursor: 'pointer',
-            transition: 'all 0.25s',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            minHeight: '190px'
-          }}
-          className="action-card-hover"
-        >
-          <div>
-            <div style={{ color: '#2196f3', marginBottom: '16px' }}><FileText size={28} /></div>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '8px', color: '#ffffff' }}>Upload Case Brief</h3>
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-              Upload PDF documents of your case briefs and let AI understand and analyze them for you.
-            </p>
-          </div>
-          <div style={{ textAlign: 'right', color: '#2196f3' }}><ArrowRight size={16} /></div>
+        <div>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px', margin: '0 0 6px 0' }}>
+            <Scale size={20} color="var(--color-gold)" /> Advocate's Court Preparation Timeline
+          </h3>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>
+            Follow these three structured stages to index your case files, conduct legal research, and practice trial advocacy.
+          </p>
         </div>
 
-        {/* Card 2: Ask */}
-        <div 
-          onClick={() => handleAction('chat')}
-          style={{
-            background: 'rgba(76, 175, 80, 0.04)',
-            border: '1px solid rgba(76, 175, 80, 0.15)',
-            borderRadius: '12px',
-            padding: '24px',
-            cursor: 'pointer',
-            transition: 'all 0.25s',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            minHeight: '190px'
-          }}
-          className="action-card-hover"
-        >
-          <div>
-            <div style={{ color: '#4caf50', marginBottom: '16px' }}><MessageSquare size={28} /></div>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '8px', color: '#ffffff' }}>Ask Legal Questions</h3>
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-              Ask any question about your case, get relevant legal insights, precedents, and analysis instantly.
-            </p>
-          </div>
-          <div style={{ textAlign: 'right', color: '#4caf50' }}><ArrowRight size={16} /></div>
-        </div>
-
-        {/* Card 3: Moot */}
-        <div 
-          onClick={() => handleAction('judge')}
-          style={{
-            background: 'rgba(255, 152, 0, 0.04)',
-            border: '1px solid rgba(255, 152, 0, 0.15)',
-            borderRadius: '12px',
-            padding: '24px',
-            cursor: 'pointer',
-            transition: 'all 0.25s',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            minHeight: '190px'
-          }}
-          className="action-card-hover"
-        >
-          <div>
-            <div style={{ color: '#ff9800', marginBottom: '16px' }}><Gavel size={28} /></div>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '8px', color: '#ffffff' }}>Moot Like a Pro</h3>
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-              Practice arguments, counter questions, and improve your legal reasoning with AI feedback.
-            </p>
-          </div>
-          <div style={{ textAlign: 'right', color: '#ff9800' }}><ArrowRight size={16} /></div>
-        </div>
-
-        {/* Card 4: Track */}
-        <div 
-          onClick={() => handleAction('sessions')}
-          style={{
-            background: 'rgba(156, 39, 176, 0.04)',
-            border: '1px solid rgba(156, 39, 176, 0.15)',
-            borderRadius: '12px',
-            padding: '24px',
-            cursor: 'pointer',
-            transition: 'all 0.25s',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            minHeight: '190px'
-          }}
-          className="action-card-hover"
-        >
-          <div>
-            <div style={{ color: '#9c27b0', marginBottom: '16px' }}><TrendingUp size={28} /></div>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '8px', color: '#ffffff' }}>Track & Improve</h3>
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-              Analyze your performance, track progress, and become a better moot court advocate.
-            </p>
-          </div>
-          <div style={{ textAlign: 'right', color: '#9c27b0' }}><ArrowRight size={16} /></div>
-        </div>
-
-        {/* Card 5: Inspiration */}
-        <div 
-          style={{
-            background: 'linear-gradient(135deg, #091325 0%, #03060c 100%)',
-            border: '1px solid rgba(205, 162, 80, 0.2)',
-            borderRadius: '12px',
-            padding: '24px',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            minHeight: '190px'
-          }}
-        >
-          {/* Subtle scales watermark overlay */}
-          <div style={{
-            position: 'absolute',
-            bottom: '10px',
-            right: '10px',
-            opacity: 0.04,
-            color: 'var(--color-gold)',
-            pointerEvents: 'none'
-          }}>
-            <Scale size={90} />
-          </div>
-
-          <div>
-            <div style={{ color: 'var(--color-gold)', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Sparkles size={12} /> Inspiration
+        <div style={{
+          display: 'flex',
+          alignItems: 'stretch',
+          gap: '20px',
+          position: 'relative'
+        }}>
+          {/* Stage 1 */}
+          <div 
+            onClick={() => handleAction('documents')}
+            style={{
+              flex: 1,
+              background: 'rgba(25, 118, 210, 0.03)',
+              border: '1px solid rgba(25, 118, 210, 0.15)',
+              borderRadius: '12px',
+              padding: '24px',
+              cursor: 'pointer',
+              transition: 'all 0.25s',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              minHeight: '210px',
+              position: 'relative'
+            }}
+            className="action-card-hover"
+          >
+            <div style={{ position: 'absolute', top: '-10px', left: '20px', background: '#0288d1', color: '#ffffff', fontSize: '0.7rem', fontWeight: '700', padding: '2px 10px', borderRadius: '100px', textTransform: 'uppercase' }}>
+              Stage 1
             </div>
-            <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.9)', lineHeight: '1.4', fontStyle: 'italic', margin: 0 }}>
-              "The law is not just a subject, it's a tool for justice. Use AI. Understand deeply. Argue fearlessly. Make an impact."
-            </p>
+            <div>
+              <div style={{ color: '#29b6f6', marginBottom: '16px', marginTop: '4px' }}><FileText size={28} /></div>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '8px', color: '#ffffff' }}>Case Briefing & Indexing</h4>
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4', margin: 0 }}>
+                Upload your case briefs and documents in PDF. The AI indexes it into your secure knowledge base.
+              </p>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#29b6f6', fontSize: '0.8rem', fontWeight: '600', marginTop: '16px' }}>
+              <span>Upload PDF ➔</span>
+            </div>
           </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--color-gold)', fontWeight: '600' }}>
-            – Your Journey, Your Justice ➔
+
+          {/* Stage 2 */}
+          <div 
+            onClick={() => handleAction('chat')}
+            style={{
+              flex: 1,
+              background: 'rgba(205, 162, 80, 0.03)',
+              border: '1px solid rgba(205, 162, 80, 0.2)',
+              borderRadius: '12px',
+              padding: '24px',
+              cursor: 'pointer',
+              transition: 'all 0.25s',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              minHeight: '210px',
+              position: 'relative'
+            }}
+            className="action-card-hover"
+          >
+            <div style={{ position: 'absolute', top: '-10px', left: '20px', background: 'var(--color-gold)', color: '#040810', fontSize: '0.7rem', fontWeight: '700', padding: '2px 10px', borderRadius: '100px', textTransform: 'uppercase' }}>
+              Stage 2
+            </div>
+            <div>
+              <div style={{ color: 'var(--color-gold)', marginBottom: '16px', marginTop: '4px' }}><Sparkles size={28} /></div>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '8px', color: '#ffffff' }}>Research & Memorials</h4>
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4', margin: 0 }}>
+                Analyze legal arguments, query precedents with the AI Co-Counsel, and auto-draft formal memorials.
+              </p>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--color-gold)', fontSize: '0.8rem', fontWeight: '600', marginTop: '16px' }}>
+              <span>Start Research ➔</span>
+            </div>
+          </div>
+
+          {/* Stage 3 */}
+          <div 
+            onClick={() => handleAction('judge')}
+            style={{
+              flex: 1,
+              background: 'rgba(230, 81, 0, 0.03)',
+              border: '1px solid rgba(230, 81, 0, 0.2)',
+              borderRadius: '12px',
+              padding: '24px',
+              cursor: 'pointer',
+              transition: 'all 0.25s',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              minHeight: '210px',
+              position: 'relative'
+            }}
+            className="action-card-hover"
+          >
+            <div style={{ position: 'absolute', top: '-10px', left: '20px', background: '#e65100', color: '#ffffff', fontSize: '0.7rem', fontWeight: '700', padding: '2px 10px', borderRadius: '100px', textTransform: 'uppercase' }}>
+              Stage 3
+            </div>
+            <div>
+              <div style={{ color: '#ff9800', marginBottom: '16px', marginTop: '4px' }}><Gavel size={28} /></div>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: '700', marginBottom: '8px', color: '#ffffff' }}>Courtroom Simulation</h4>
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4', margin: 0 }}>
+                Practice oral arguments and face realistic cross-questioning in front of simulated Supreme Court judges.
+              </p>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#ff9800', fontSize: '0.8rem', fontWeight: '600', marginTop: '16px' }}>
+              <span>Enter Courtroom ➔</span>
+            </div>
           </div>
         </div>
       </div>
