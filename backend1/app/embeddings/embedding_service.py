@@ -6,7 +6,7 @@ from app.config import settings
 def generate_embedding(text: str):
     provider = settings.llm_provider
     if provider == "gemini" and not settings.gemini_api_key:
-        provider = "ollama"
+        raise ValueError("GEMINI_API_KEY is not set. Please add it to your Hugging Face Space Secrets under the Settings tab.")
 
     if provider == "gemini":
         try:
