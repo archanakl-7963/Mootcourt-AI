@@ -82,40 +82,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Middle: Menu Navigation Links */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
-        {menuItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: activeTab === item.id ? 'var(--color-gold)' : 'rgba(255, 255, 255, 0.65)',
-              fontSize: '0.88rem',
-              fontWeight: activeTab === item.id ? '700' : '500',
-              padding: '6px 0',
-              cursor: 'pointer',
-              position: 'relative',
-              transition: 'all 0.2s',
-              outline: 'none'
-            }}
-          >
-            {item.label}
-            {activeTab === item.id && (
-              <span style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                width: '100%',
-                height: '2px',
-                background: 'var(--color-gold)',
-                borderRadius: '2px'
-              }} />
-            )}
-          </button>
-        ))}
-      </nav>
+
 
       {/* Right side: Theme and Profile */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>

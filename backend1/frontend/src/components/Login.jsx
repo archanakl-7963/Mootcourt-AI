@@ -3,7 +3,7 @@ import { useMootCourt } from '../context/MootCourtContext';
 import { Scale, Lock, User, CheckCircle, AlertTriangle, ArrowRight, MapPin } from 'lucide-react';
 
 const Login = () => {
-  const { loginUser } = useMootCourt();
+  const { loginUser, setUserRole } = useMootCourt();
   const [isLoginView, setIsLoginView] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,6 +14,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [role, setRole] = useState('student');
 
   const toggleView = () => {
     setIsLoginView(!isLoginView);
@@ -66,6 +67,7 @@ const Login = () => {
             data.data.college, 
             data.data.profileImage
           );
+          setUserRole(role);
         } else {
           setSuccessMsg('Registration successful! Please login.');
           setIsLoginView(true);
@@ -175,6 +177,51 @@ const Login = () => {
         )}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Role Selector */}
+          <div style={{ textAlign: 'left' }}>
+            <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>My Role</label>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                type="button"
+                onClick={() => { setRole('student'); setCourse('LLB Student'); }}
+                style={{
+                  flex: 1,
+                  padding: '10px',
+                  borderRadius: '8px',
+                  border: role === 'student' ? '1.5px solid var(--color-gold)' : '1px solid var(--border-glass)',
+                  background: role === 'student' ? 'rgba(212, 175, 55, 0.08)' : 'transparent',
+                  color: role === 'student' ? 'var(--color-gold)' : 'rgba(255,255,255,0.6)',
+                  fontWeight: '700',
+                  fontSize: '0.82rem',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'all 0.2s'
+                }}
+              >
+                👨‍🎓 Student
+              </button>
+              <button
+                type="button"
+                onClick={() => { setRole('professor'); setCourse('Law Professor'); }}
+                style={{
+                  flex: 1,
+                  padding: '10px',
+                  borderRadius: '8px',
+                  border: role === 'professor' ? '1.5px solid var(--color-gold)' : '1px solid var(--border-glass)',
+                  background: role === 'professor' ? 'rgba(212, 175, 55, 0.08)' : 'transparent',
+                  color: role === 'professor' ? 'var(--color-gold)' : 'rgba(255,255,255,0.6)',
+                  fontWeight: '700',
+                  fontSize: '0.82rem',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'all 0.2s'
+                }}
+              >
+                👩‍🏫 Professor
+              </button>
+            </div>
+          </div>
+
           {/* Username */}
           <div style={{ textAlign: 'left' }}>
             <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>Username</label>

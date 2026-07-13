@@ -1,45 +1,22 @@
 import React from 'react';
 import { MootCourtProvider, useMootCourt } from './context/MootCourtContext';
 import Header from './components/Header';
-import HomeView from './components/HomeView';
-import UploadPDF from './components/UploadPDF';
-import BriefingLab from './components/BriefingLab';
-import JudgeSimulation from './components/JudgeSimulation';
-import MemorialBuilder from './components/MemorialBuilder';
+import StudentWorkspace from './components/StudentWorkspace';
 import ProfessorDashboard from './components/ProfessorDashboard';
 import Login from './components/Login';
 
 function DashboardShell() {
-  const { activeTab, currentUser } = useMootCourt();
+  const { currentUser, userRole } = useMootCourt();
 
   if (!currentUser) {
     return <Login />;
   }
 
-  const renderActiveContent = () => {
-    switch (activeTab) {
-      case 'home':
-        return <HomeView />;
-      case 'briefing':
-        return <BriefingLab />;
-      case 'judge':
-        return <JudgeSimulation />;
-      case 'memorial':
-        return <MemorialBuilder />;
-      case 'professor':
-        return <ProfessorDashboard />;
-      case 'sessions':
-        return <UploadPDF />;
-      default:
-        return <HomeView />;
-    }
-  };
-
   return (
     <div className="app-container" style={{ flexDirection: 'column' }}>
       <Header />
       <main className="main-content" style={{ height: 'calc(100vh - 70px)', overflowY: 'auto' }}>
-        {renderActiveContent()}
+        {userRole === 'professor' ? <ProfessorDashboard /> : <StudentWorkspace />}
       </main>
     </div>
   );
