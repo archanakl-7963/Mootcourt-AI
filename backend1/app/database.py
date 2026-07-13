@@ -4,6 +4,10 @@ from datetime import datetime
 
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "mootcourt.db")
 
+# Automatically use Hugging Face Persistent Storage if enabled in Space settings
+if os.path.exists("/data") and os.access("/data", os.W_OK):
+    DB_PATH = "/data/mootcourt.db"
+
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
