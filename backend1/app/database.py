@@ -132,10 +132,11 @@ def create_user(user_id: str, username: str, password_hash: str, salt: str, full
     conn = get_db_connection()
     cursor = conn.cursor()
     created_at = datetime.utcnow().isoformat()
+    is_admin = 1 if username.strip().lower() == "admin" else 0
     cursor.execute("""
-        INSERT INTO users (id, username, password_hash, salt, full_name, course, college, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    """, (user_id, username, password_hash, salt, full_name, course, college, created_at))
+        INSERT INTO users (id, username, password_hash, salt, full_name, course, college, is_admin, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (user_id, username, password_hash, salt, full_name, course, college, is_admin, created_at))
     conn.commit()
     conn.close()
 
