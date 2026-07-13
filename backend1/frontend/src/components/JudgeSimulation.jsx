@@ -14,7 +14,9 @@ import {
   Sparkles,
   Award,
   ArrowLeft,
-  XCircle
+  XCircle,
+  Mic,
+  MicOff
 } from 'lucide-react';
 
 const JudgeSimulation = () => {
@@ -34,13 +36,57 @@ const JudgeSimulation = () => {
     simulationSide,
     setSimulationSide,
     simulationDispute,
-    setSimulationDispute
+    setSimulationDispute,
+    language
   } = useMootCourt();
 
   const [argumentInput, setArgumentInput] = useState('');
   const [seconds, setSeconds] = useState(0);
   const [setupError, setSetupError] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef(null);
+  const recognitionRef = useRef(null);
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      setIsRecording(false);
+    } else {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
+        return;
+      }
+      
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      recognition.lang = language === 'hi' ? 'hi-IN' : 'en-IN';
+
+      recognition.onstart = () => {
+        setIsRecording(true);
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[event.results.length - 1][0].transcript;
+        setArgumentInput(prev => prev ? prev + " " + transcript : transcript);
+      };
+
+      recognition.onerror = (e) => {
+        console.error("Speech recognition error:", e);
+        setIsRecording(false);
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognitionRef.current = recognition;
+      recognition.start();
+    }
+  };
 
   const sampleProblems = [
     {
@@ -114,8 +160,12 @@ const JudgeSimulation = () => {
       return;
     }
     setSetupError('');
+    let finalDispute = simulationDispute;
+    if (language === 'hi') {
+      finalDispute += " [Instruction: Please conduct the entire trial, ask all questions, and provide all scorecard evaluation feedback in Hindi (हिन्दी) language. Converse directly in Hindi.]";
+    }
     const result = await startNewSimulation(
-      simulationDispute,
+      finalDispute,
       simulationSide,
       simulationMode,
       selectedJudge
@@ -582,6 +632,29 @@ const JudgeSimulation = () => {
               disabled={isJudgeEvaluating}
               style={{ minHeight: '60px' }}
             />
+            <button
+              onClick={toggleRecording}
+              disabled={isJudgeEvaluating}
+              style={{ 
+                alignSelf: 'flex-end', 
+                width: '44px', 
+                height: '44px', 
+                marginRight: '8px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                background: isRecording ? 'rgba(239, 68, 68, 0.15)' : 'rgba(255,255,255,0.03)',
+                border: isRecording ? '1px solid #ef4444' : '1px solid var(--border-glass)',
+                color: isRecording ? '#ef4444' : 'rgba(255,255,255,0.7)',
+                outline: 'none',
+                transition: 'all 0.2s'
+              }}
+              title={isRecording ? "Listening... Click to stop" : "Speak argument (Speech-to-Text)"}
+            >
+              {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
+            </button>
             <button
               className="chat-send-btn"
               onClick={handleSend}

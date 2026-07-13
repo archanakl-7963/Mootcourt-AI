@@ -10,6 +10,7 @@ from app.database import (
     save_score,
     get_score,
     list_sessions,
+    list_all_student_scores,
 )
 from app.services.simulation_service import generate_simulation_response, run_evaluation
 from app.logger import logger
@@ -144,4 +145,16 @@ def end_session(session_id: str, x_user_id: str = Header(...)):
         raise
     except Exception as e:
         logger.exception("Error ending session")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/professor/ledger")
+def get_professor_ledger(x_user_id: str = Header(...)):
+    try:
+        scores = list_all_student_scores()
+        return {
+            "success": True,
+            "scorecards": scores
+        }
+    except Exception as e:
+        logger.exception("Error loading professor ledger")
         raise HTTPException(status_code=500, detail=str(e))

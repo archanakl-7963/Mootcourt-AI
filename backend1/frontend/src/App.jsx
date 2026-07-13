@@ -3,9 +3,10 @@ import { MootCourtProvider, useMootCourt } from './context/MootCourtContext';
 import Header from './components/Header';
 import HomeView from './components/HomeView';
 import UploadPDF from './components/UploadPDF';
-import ChatBox from './components/ChatBox';
+import BriefingLab from './components/BriefingLab';
 import JudgeSimulation from './components/JudgeSimulation';
 import MemorialBuilder from './components/MemorialBuilder';
+import ProfessorDashboard from './components/ProfessorDashboard';
 import Login from './components/Login';
 
 function DashboardShell() {
@@ -19,13 +20,14 @@ function DashboardShell() {
     switch (activeTab) {
       case 'home':
         return <HomeView />;
-      case 'chat':
-        return <ChatBox />;
+      case 'briefing':
+        return <BriefingLab />;
       case 'judge':
         return <JudgeSimulation />;
       case 'memorial':
         return <MemorialBuilder />;
-      case 'documents':
+      case 'professor':
+        return <ProfessorDashboard />;
       case 'sessions':
         return <UploadPDF />;
       default:

@@ -10,6 +10,8 @@ export const MootCourtProvider = ({ children }) => {
   const [currentCase, setCurrentCase] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
+  const [language, setLanguage] = useState('en');
+  const [userRole, setUserRole] = useState('student');
   
   // User Authentication State
   const [currentUser, setCurrentUser] = useState(null);
@@ -602,7 +604,12 @@ Write ONLY the content suitable for pasting directly into the memorial draft.
       setActiveTab,
       documents,
       currentCase,
+      setCurrentCase,
       isUploading,
+      language,
+      setLanguage,
+      userRole,
+      setUserRole,
       uploadStatus,
       uploadPDFFile,
       

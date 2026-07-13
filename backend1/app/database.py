@@ -233,3 +233,20 @@ def get_user_documents_count(user_id: str) -> int:
     count = cursor.fetchone()[0]
     conn.close()
     return count
+
+def list_all_student_scores():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT s.id as session_id, s.title as case_title, s.mode, s.side, s.judge_personality as judge,
+               u.full_name as student_name, u.college, u.course,
+               sc.overall_score, sc.clarity, sc.pushback, sc.reasoning, sc.persuasiveness, sc.feedback, sc.created_at
+        FROM sessions s
+        JOIN users u ON s.user_id = u.id
+        JOIN scores sc ON s.id = sc.session_id
+        WHERE s.status = 'completed'
+        ORDER BY sc.created_at DESC
+    """)
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(row) for row in rows]
