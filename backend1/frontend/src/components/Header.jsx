@@ -309,64 +309,77 @@ const Header = () => {
             </button>
 
             {/* Modal Header */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid var(--border-glass)', paddingBottom: '16px', marginBottom: '24px' }}>
-              <Scale size={28} color="var(--color-gold)" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid var(--border-glass)', paddingBottom: '16px', marginBottom: '20px' }}>
+              <Scale size={24} color="var(--color-gold)" />
               <div>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: '#ffffff', margin: 0 }}>MootCourt AI - Advocate's User Guide</h3>
-                <span style={{ fontSize: '0.78rem', color: 'var(--color-gold)', fontWeight: '600' }}>STEP-BY-STEP LITIGATION PREPARATION</span>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: '#ffffff', margin: 0 }}>How to use MootCourt AI</h3>
+                <span style={{ fontSize: '0.72rem', color: 'var(--color-gold)', fontWeight: '700', letterSpacing: '0.05em' }}>SIMPLE WORKFLOW GUIDE</span>
               </div>
             </div>
 
             {/* Modal Steps */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {/* Step 1 */}
-              <div style={{ display: 'flex', gap: '14px' }}>
-                <div style={{ background: 'rgba(41, 182, 246, 0.1)', color: '#29b6f6', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: '700', fontSize: '0.82rem', border: '1px solid rgba(41, 182, 246, 0.3)' }}>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ background: 'rgba(41, 182, 246, 0.08)', color: '#29b6f6', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: '700', fontSize: '0.8rem', border: '1px solid rgba(41, 182, 246, 0.2)' }}>
                   1
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: '700', color: '#ffffff', marginBottom: '2px' }}>Case Indexing & Landmark Library (Briefing Lab)</h4>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4', margin: 0 }}>
-                    In the <strong>Briefing Lab</strong>, upload a PDF, paste custom facts, or select the **Landmark Cases** tab to load landmark disputes (e.g. *Kesavananda Bharati*) instantly. Select any brief on the left to set it as active.
+                  <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#ffffff', marginBottom: '1px' }}>Load Case Facts (Briefing Lab)</h4>
+                  <p style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', lineHeight: '1.3', margin: 0 }}>
+                    Upload a PDF, paste text, or click a <strong>Historic Case</strong>. Select it from the list on the left to activate it.
                   </p>
                 </div>
               </div>
 
               {/* Step 2 */}
-              <div style={{ display: 'flex', gap: '14px' }}>
-                <div style={{ background: 'rgba(212, 175, 55, 0.1)', color: 'var(--color-gold)', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: '700', fontSize: '0.82rem', border: '1px solid rgba(212, 175, 55, 0.3)' }}>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ background: 'rgba(212, 175, 55, 0.08)', color: 'var(--color-gold)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: '700', fontSize: '0.8rem', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
                   2
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: '700', color: '#ffffff', marginBottom: '2px' }}>Bilingual Consultation (English & हिन्दी)</h4>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4', margin: 0 }}>
-                    Toggle the <strong>🌐 Language</strong> button in the header. The AI Co-Counsel and simulated Judges will adapt their responses and grading feedback to your preferred language (English or Hindi).
+                  <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#ffffff', marginBottom: '1px' }}>Study & Ask AI (Briefing Lab)</h4>
+                  <p style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', lineHeight: '1.3', margin: 0 }}>
+                    Use the chat area to ask questions about your case, study laws, or draft court papers.
                   </p>
                 </div>
               </div>
 
               {/* Step 3 */}
-              <div style={{ display: 'flex', gap: '14px' }}>
-                <div style={{ background: 'rgba(156, 39, 176, 0.1)', color: '#d81b60', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: '700', fontSize: '0.82rem', border: '1px solid rgba(156, 39, 176, 0.3)' }}>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ background: 'rgba(156, 39, 176, 0.08)', color: '#d81b60', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: '700', fontSize: '0.8rem', border: '1px solid rgba(156, 39, 176, 0.2)' }}>
                   3
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: '700', color: '#ffffff', marginBottom: '2px' }}>Oral Advocacy Speech-to-Text (Courtroom Practice)</h4>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4', margin: 0 }}>
-                    Inside <strong>Courtroom Practice</strong>, tap the **Microphone (🎙️)** button next to the input area to speak your pleadings. The app transcribes your voice in real time for hands-free advocacy training.
+                  <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#ffffff', marginBottom: '1px' }}>Practice Courtroom (Courtroom Practice)</h4>
+                  <p style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', lineHeight: '1.3', margin: 0 }}>
+                    Select a judge profile and argue your case. Tap the <strong>Microphone (🎙️)</strong> to speak instead of typing.
                   </p>
                 </div>
               </div>
 
               {/* Step 4 */}
-              <div style={{ display: 'flex', gap: '14px' }}>
-                <div style={{ background: 'rgba(230, 81, 0, 0.1)', color: '#ff9800', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: '700', fontSize: '0.82rem', border: '1px solid rgba(230, 81, 0, 0.3)' }}>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ background: 'rgba(230, 81, 0, 0.08)', color: '#ff9800', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: '700', fontSize: '0.8rem', border: '1px solid rgba(230, 81, 0, 0.2)' }}>
                   4
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: '700', color: '#ffffff', marginBottom: '2px' }}>Professor Portal & Grading Ledger</h4>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4', margin: 0 }}>
-                    Click **Role: Student** in the header to switch to **Professor**. In this portal, professors can upload custom class assignments and inspect the scorecard grades and performance metrics of their entire class.
+                  <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#ffffff', marginBottom: '1px' }}>Professor Tools</h4>
+                  <p style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', lineHeight: '1.3', margin: 0 }}>
+                    Switch your role in the header to **Professor** to assign custom cases and review student scores.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 5 */}
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ background: 'rgba(16, 185, 129, 0.08)', color: 'var(--color-success)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: '700', fontSize: '0.8rem', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                  🌐
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '0.85rem', fontWeight: '700', color: '#ffffff', marginBottom: '1px' }}>Bilingual Switch (English / Hindi)</h4>
+                  <p style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', lineHeight: '1.3', margin: 0 }}>
+                    Click the <strong>🌐 English/हिन्दी</strong> button in the header anytime to switch all AI chats and grading.
                   </p>
                 </div>
               </div>
