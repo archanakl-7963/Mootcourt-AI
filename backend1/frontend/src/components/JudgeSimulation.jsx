@@ -46,6 +46,39 @@ const JudgeSimulation = () => {
   const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
+  const lastMessageTextRef = useRef('');
+
+  // Speech Synthesis triggers whenever judgeMessages list receives a new assistant response
+  useEffect(() => {
+    if (judgeMessages.length > 0) {
+      const lastMsg = judgeMessages[judgeMessages.length - 1];
+      if (lastMsg.role === 'assistant' && lastMsg.text !== lastMessageTextRef.current) {
+        lastMessageTextRef.current = lastMsg.text;
+        
+        if (isVoiceEnabled) {
+          window.speechSynthesis.cancel();
+          const cleanText = lastMsg.text
+            .replace(/\*+/g, '')
+            .replace(/#+/g, '')
+            .replace(/`+/g, '')
+            .replace(/\[.*?\]\(.*?\)/g, '')
+            .trim();
+
+          const utterance = new SpeechSynthesisUtterance(cleanText);
+          utterance.lang = language === 'hi' ? 'hi-IN' : 'en-IN';
+          window.speechSynthesis.speak(utterance);
+        }
+      }
+    }
+  }, [judgeMessages, isVoiceEnabled, language]);
+
+  // Mute voice if simulation exits
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
 
   const toggleRecording = () => {
     if (isRecording) {
@@ -632,6 +665,37 @@ const JudgeSimulation = () => {
               disabled={isJudgeEvaluating}
               style={{ minHeight: '60px' }}
             />
+            {/* Voice Assistant Toggle */}
+            <button
+              onClick={() => {
+                const newVal = !isVoiceEnabled;
+                setIsVoiceEnabled(newVal);
+                if (!newVal) {
+                  window.speechSynthesis.cancel();
+                }
+              }}
+              style={{ 
+                alignSelf: 'flex-end', 
+                width: '44px', 
+                height: '44px', 
+                marginRight: '8px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                background: isVoiceEnabled ? 'rgba(212, 175, 55, 0.15)' : 'rgba(255,255,255,0.03)',
+                border: isVoiceEnabled ? '1px solid var(--color-gold)' : '1px solid var(--border-glass)',
+                color: isVoiceEnabled ? 'var(--color-gold)' : 'rgba(255,255,255,0.7)',
+                outline: 'none',
+                transition: 'all 0.2s',
+                fontSize: '1.1rem'
+              }}
+              title={isVoiceEnabled ? "Voice Assistant: ON (AI reads out loud)" : "Voice Assistant: OFF (AI muted)"}
+            >
+              {isVoiceEnabled ? '🔊' : '🔇'}
+            </button>
+
             <button
               onClick={toggleRecording}
               disabled={isJudgeEvaluating}

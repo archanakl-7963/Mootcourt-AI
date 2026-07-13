@@ -20,6 +20,7 @@ export const MootCourtProvider = ({ children }) => {
   const [userCourse, setUserCourse] = useState('');
   const [userCollege, setUserCollege] = useState('');
   const [profileImage, setProfileImage] = useState('');
+  const [isAdmin, setIsAdmin] = useState(0);
 
   // Chat State
   const [messages, setMessages] = useState([
@@ -59,6 +60,7 @@ export const MootCourtProvider = ({ children }) => {
         setUserCourse(parsed.course || "LLB Student");
         setUserCollege(parsed.college || "Law School");
         setProfileImage(parsed.profileImage || "");
+        setIsAdmin(parsed.isAdmin || 0);
         
         // Load their specific history
         fetchUserDocuments(parsed.userId);
@@ -75,13 +77,14 @@ export const MootCourtProvider = ({ children }) => {
 
 
   // Auth Operations
-  const loginUser = (userId, username, fullName, course, college, profileImg) => {
+  const loginUser = (userId, username, fullName, course, college, profileImg, isAdminVal = 0) => {
     setCurrentUser(username);
     setCurrentUserId(userId);
     setUserFullName(fullName || username);
     setUserCourse(course || "LLB Student");
     setUserCollege(college || "Law School");
     setProfileImage(profileImg || "");
+    setIsAdmin(isAdminVal);
     
     localStorage.setItem('mootcourt_user', JSON.stringify({ 
       userId, 
@@ -89,7 +92,8 @@ export const MootCourtProvider = ({ children }) => {
       fullName: fullName || username,
       course: course || "LLB Student",
       college: college || "Law School",
-      profileImage: profileImg || ""
+      profileImage: profileImg || "",
+      isAdmin: isAdminVal
     }));
     
     // Fetch user specific data
@@ -105,6 +109,7 @@ export const MootCourtProvider = ({ children }) => {
     setUserCourse('');
     setUserCollege('');
     setProfileImage('');
+    setIsAdmin(0);
     localStorage.removeItem('mootcourt_user');
     
     // Reset state
@@ -537,6 +542,8 @@ export const MootCourtProvider = ({ children }) => {
       userCourse,
       userCollege,
       profileImage,
+      isAdmin,
+      setIsAdmin,
       uploadProfileImage,
       loginUser,
       logoutUser,

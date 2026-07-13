@@ -65,9 +65,14 @@ const Login = () => {
             data.data.fullName, 
             data.data.course, 
             data.data.college, 
-            data.data.profileImage
+            data.data.profileImage,
+            data.data.is_admin || 0
           );
-          setUserRole(role);
+          if (data.data.is_admin) {
+            setUserRole('admin');
+          } else {
+            setUserRole(role);
+          }
         } else {
           setSuccessMsg('Registration successful! Please login.');
           setIsLoginView(true);
