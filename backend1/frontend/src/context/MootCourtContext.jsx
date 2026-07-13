@@ -45,28 +45,7 @@ export const MootCourtProvider = ({ children }) => {
   const [simulationSide, setSimulationSide] = useState('petitioner');
   const [simulationDispute, setSimulationDispute] = useState('');
 
-  // Memorial Builder State
-  const [activeMemorialRole, setActiveMemorialRole] = useState('petitioner'); // 'petitioner' | 'respondent'
-  const [activeMemorialSection, setActiveMemorialSection] = useState('statementOfJurisdiction');
-  const [isDrafting, setIsDrafting] = useState(false);
-  const [memorialDrafts, setMemorialDrafts] = useState({
-    petitioner: {
-      statementOfJurisdiction: '',
-      statementOfFacts: '',
-      issuesRaised: '',
-      summaryOfArguments: '',
-      argumentsAdvanced: '',
-      prayer: ''
-    },
-    respondent: {
-      statementOfJurisdiction: '',
-      statementOfFacts: '',
-      issuesRaised: '',
-      summaryOfArguments: '',
-      argumentsAdvanced: '',
-      prayer: ''
-    }
-  });
+
 
   // Startup: Load authentication session and drafts
   useEffect(() => {
@@ -89,32 +68,11 @@ export const MootCourtProvider = ({ children }) => {
       }
     }
 
-    const savedDrafts = localStorage.getItem('mootcourt_memorials');
-    if (savedDrafts) {
-      try {
-        setMemorialDrafts(JSON.parse(savedDrafts));
-      } catch (e) {
-        console.error("Error reading saved memorials from local storage:", e);
-      }
-    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const saveDraftsToStorage = (newDrafts) => {
-    localStorage.setItem('mootcourt_memorials', JSON.stringify(newDrafts));
-  };
 
-  const updateMemorialDraft = (role, section, text) => {
-    const updated = {
-      ...memorialDrafts,
-      [role]: {
-        ...memorialDrafts[role],
-        [section]: text
-      }
-    };
-    setMemorialDrafts(updated);
-    saveDraftsToStorage(updated);
-  };
 
   // Auth Operations
   const loginUser = (userId, username, fullName, course, college, profileImg) => {
@@ -555,48 +513,7 @@ export const MootCourtProvider = ({ children }) => {
     setCurrentScore(null);
   };
 
-  // Help Draft Memorial Section
-  const draftMemorialSectionAI = async (role, section, instructions) => {
-    if (!currentUserId) return { success: false, error: "Authentication required." };
-    setIsDrafting(true);
-    const docContext = currentCase ? `based on the case details uploaded: Name: ${currentCase.name}` : "";
-    
-    const draftPrompt = `
-You are an expert legal draftsperson assisting in preparing a Moot Court Memorial.
-Please draft a professional, standard legal memo section for the ${role.toUpperCase()} (Petitioner/Respondent).
-The section requested is: "${section.toUpperCase()}" (e.g. Statement of Facts, Issues Raised, Summary of Arguments, Arguments Advanced, or Prayer).
 
-User instructions: "${instructions}"
-${docContext}
-
-Provide a comprehensive, high-quality draft following traditional legal formatting (e.g. bluebook styling, formal headers, legal phrasing). Outline citations and arguments logical flow. 
-Write ONLY the content suitable for pasting directly into the memorial draft.
-`;
-
-    try {
-      const response = await fetch('/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-User-Id': currentUserId
-        },
-        body: JSON.stringify({ message: draftPrompt }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        updateMemorialDraft(role, section, data.data.reply);
-        return { success: true };
-      } else {
-        return { success: false, error: data.detail || "Unable to draft section." };
-      }
-    } catch (error) {
-      console.error("Drafting error:", error);
-      return { success: false, error: "Connection error. Make sure backend is running." };
-    } finally {
-      setIsDrafting(false);
-    }
-  };
 
   return (
     <MootCourtContext.Provider value={{
@@ -651,15 +568,7 @@ Write ONLY the content suitable for pasting directly into the memorial draft.
       endSimulationSession,
       loadSessionDetails,
       
-      // Memorials
-      activeMemorialRole,
-      setActiveMemorialRole,
-      activeMemorialSection,
-      setActiveMemorialSection,
-      memorialDrafts,
-      updateMemorialDraft,
-      isDrafting,
-      draftMemorialSectionAI
+
     }}>
       {children}
     </MootCourtContext.Provider>
