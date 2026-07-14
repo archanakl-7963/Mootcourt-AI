@@ -36,11 +36,8 @@ app.include_router(simulation_router)
 app.include_router(auth_router)
 
 # Locate and serve compiled frontend client files
-frontend_dist = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "frontend",
-    "dist"
-)
+backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+frontend_dist = os.path.abspath(os.path.join(backend_dir, "..", "frontend", "dist"))
 
 # Initialize and mount static uploads directory for avatars
 static_dir = os.path.join(
