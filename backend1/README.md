@@ -1,59 +1,78 @@
-# Moot Court AI: Advocate Workspace & Simulator
+# 🏛️ Moot Court AI: Professional Advocate Suite
 
-An AI-Powered practice partner for law students. It acts as a strict High Court Judge (Mode 1) or a tough Opposing Counsel (Mode 2) to challenge students on oral arguments, and issues a structured performance scorecard (Mode 3) at the end of the trial. It also indexes litigation briefs using local vector search (FAISS) and includes a legal memorial drafter.
-
----
-
-## 🏛️ System Architecture
-
-The project consists of a React SPA frontend and a FastAPI backend. It persists sessions in a local SQLite database and supports both local LLMs via Ollama and Google Gemini.
-
-```
-                  +--------------------------------+
-                  |         React Frontend         |
-                  |     (Vite Dev or Static HTML)  |
-                  +---------------+----------------+
-                                  |
-                           HTTP   |  (API calls / Sessions)
-                                  v
-                  +---------------+----------------+
-                  |        FastAPI Backend         |
-                  |     (Runs on Port 8001)        |
-                  +---------------+----------------+
-                                  |
-        +-------------------------+-------------------------+
-        | (RAG Context)           | (CRUD Operations)       | (Inference / Embeddings)
-        v                         v                         v
-+-------+-------+         +-------+-------+         +-------+-------+
-|  FAISS Index  |         | SQLite DB     |         | LLM Provider  |
-| (Local RAM)   |         | (mootcourt.db)|         | (Ollama/Gemini|
-+---------------+         +---------------+         +---------------+
-```
+An AI-powered moot court simulator and legal drafting assistant designed for law students and schools. Moot Court AI acts as an interactive bench panel, allowing students to present oral arguments, respond to legal pushback, study case briefs, and receive professional performance scorecards evaluated by AI Judges.
 
 ---
 
-## ⚙️ Configuration & Setup
+## 🌟 Key Features
 
-1. **Virtual Environment**: Ensure your dependencies are installed within your Python virtual environment (e.g. at the parent directory `.venv`).
-2. **Environment Variables**: Copy `.env.example` to `.env` in the backend root directory (`backend1/.env`):
+*   **⚖️ Interactive Bench Simulation**: Practice mock trials against distinct judge personalities (e.g., Strict High Court Judge, Sympathetic Judge, Procedural Judge).
+*   **🎙️ Hands-Free Oral Dictation**: Present arguments verbally using browser-based Speech-to-Text (`webkitSpeechRecognition`) transcription.
+*   **🌐 Bilingual (English / हिन्दी) Support**: One-click toggle changes chat, trial pushback, and performance reports between English and Hindi.
+*   **📚 Case Facts Indexing (RAG)**: Upload case PDFs, paste text, or select Landmark Indian Cases (e.g., *Kesavananda Bharati*, *Maneka Gandhi*). Documents are indexed using local FAISS vector search.
+*   **👩‍🏫 Professor Portal**: Allows faculty to upload custom litigation briefs, view student performance scorecards, and review active class grade ledgers.
+*   **⚙️ Admin Console**: A secure administrator interface (auto-bootstrapped on registering the `"admin"` user) to monitor users, view registration dates, and activate/deactivate accounts.
+*   **🔁 Session Resumption & Persistence**: Automatically saves and loads your past mock trials from a persistent SQLite database. Click "Resume Arena" to pick up exactly where you left off.
+
+---
+
+## 🏗️ System Architecture
+
+The suite is built as a Single Page Application (React) communicating with a FastAPI (Python) server, with FAISS for semantic context retrieval, and SQLite for database persistence.
+
+```
+                  +-----------------------------------+
+                  |         React SPA Client          |
+                  |     (Vite + Tailwind/Vanilla CSS) |
+                  +-----------------+-----------------+
+                                    |
+                             HTTP   |  (API Calls, Auth, Voice JSON)
+                                    v
+                  +-----------------+-----------------+
+                  |         FastAPI Backend           |
+                  |         (Runs on Port 7860)       |
+                  +-----------------+-----------------+
+                                    |
+         +--------------------------+--------------------------+
+         | (RAG Context)            | (CRUD Operations)        | (LLM Inference)
+         v                          v                          v
+ +-------+-------+          +-------+-------+          +-------+-------+
+ |  FAISS Index  |          |  SQLite DB    |          | LLM Provider  |
+ | (Local RAM)   |          | (mootcourt.db)|          | (Gemini/Local)|
+ +---------------+          +---------------+          +---------------+
+```
+
+---
+
+## ⚙️ Settings & Configuration
+
+1. **Virtual Environment**: Ensure your dependencies are installed in your Python virtual environment (e.g., `.venv`):
    ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   pip install -r backend1/requirements.txt
+   ```
+
+2. **Environment Variables**: Copy `.env.example` to `.env` in the backend root directory (`backend1/.env`) and add your Google Gemini API key:
+   ```bash
+   # In backend1/
    cp .env.example .env
    ```
-3. **Download Local Models (if using Ollama)**:
-   - For chat/simulation: `ollama pull phi3` (or `ollama pull llama3.2`)
-   - For vector embeddings (RAG): `ollama pull nomic-embed-text`
+
+3. **Persistent Storage (Hugging Face)**:
+   The app automatically detects if Hugging Face Persistent Storage is enabled and mounts the SQLite file under `/data/mootcourt.db`. Enable **"Persistent Storage"** in your Space Settings to persist user accounts and sessions forever.
 
 ---
 
 ## 🚀 Running the Project
 
-### Development Mode (Dual Server)
-Run both backend and frontend servers with live hot-reloading:
+### 👨‍💻 Development Mode (Dual Server)
+Run both servers with hot-reloading active:
 
-1. **Start the FastAPI backend (Port 8001)**:
+1. **Start the FastAPI backend (Port 8000)**:
    ```bash
    cd backend1
-   & "path/to/.venv/Scripts/python" -m uvicorn app.main:app --port 8001 --reload
+   uvicorn app.main:app --reload --port 8000
    ```
 2. **Start the React frontend (Port 5173)**:
    ```bash
@@ -61,42 +80,40 @@ Run both backend and frontend servers with live hot-reloading:
    npm install
    npm run dev
    ```
-   *Vite is configured to proxy all `/chat`, `/upload-pdf`, and `/sessions` requests automatically to the backend on port 8001.*
+   *Vite proxies `/chat`, `/auth`, and `/sessions` requests automatically to the backend on port 8000.*
 
 ---
 
-## 📦 Production Deployment (Single-Server Mode)
-
-For a production-ready deployment, build the React frontend so it compiles into static assets. The FastAPI backend is configured to detect and serve these files directly, eliminating the need to run separate servers.
+### 📦 Production Deployment (Single-Server Mode)
+Build the React frontend into static assets so the FastAPI backend can serve the complete app on a single port:
 
 1. **Compile the React app**:
    ```bash
    cd backend1/frontend
    npm run build
    ```
-   *This compiles the SPA into `backend1/frontend/dist/`.*
+   *This compiles the React SPA into `backend1/frontend/dist/`.*
 
-2. **Run the production FastAPI backend**:
+2. **Run the production FastAPI server**:
    ```bash
    cd backend1
-   & "path/to/.venv/Scripts/python" -m uvicorn app.main:app --host 0.0.0.0 --port 8001
+   uvicorn app.main:app --host 0.0.0.0 --port 7860
    ```
-   - Open your browser and navigate to `http://localhost:8001`.
-   - The backend will serve the user interface automatically and route API calls to the same port.
+   *Open your browser to `http://localhost:7860` to access the full application.*
 
 ---
 
-## 📂 Project File Mappings
+## 📂 Project Structure
 
-### Backend Code (`app/`)
-- [main.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/main.py): Sets up database creation hooks, CORS policies, API routing, and serves compiled frontend assets.
-- [config.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/config.py): Stores configurations and handles `.env` loading.
-- [database.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/database.py): Core database manager. Connects to SQLite and handles CRUD operations for past scorecards and transcripts.
-- [routes/simulation.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/routes/simulation.py): API controllers to convense, text, and conclude sessions.
-- [services/simulation_service.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/services/simulation_service.py): Prepares system instructions for the judges/opponents and builds the evaluation prompt.
-- [embeddings/embedding_service.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/embeddings/embedding_service.py): Generates 768-dimension vectors using either Gemini or local `nomic-embed-text`.
+### 🐍 Backend Code (`backend1/app/`)
+*   [main.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/main.py) - App configuration, CORS policies, endpoint routing, and static file serving.
+*   [database.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/database.py) - SQLite manager, migrations handler, user list loaders, and admin privileges managers.
+*   [routes/auth.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/routes/auth.py) - Sign-up/login validators, active account checks, and admin user controller APIs.
+*   [routes/simulation.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/routes/simulation.py) - Chat triggers, mock trials handlers, and grading endpoints.
+*   [services/simulation_service.py](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/app/services/simulation_service.py) - Instructions builder for the AI Bench and performance evaluators.
 
-### Frontend Code (`frontend/src/`)
-- [context/MootCourtContext.jsx](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/frontend/src/context/MootCourtContext.jsx): Stores app context and hooks React functions to FastAPI endpoints.
-- [components/JudgeSimulation.jsx](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/frontend/src/components/JudgeSimulation.jsx): Arena interface managing dispute briefings, bench compositions, live trial, and performance report cards.
-- [components/UploadPDF.jsx](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/frontend/src/components/UploadPDF.jsx): File indexing console and archive list showing past grades.
+### ⚛️ Frontend Code (`backend1/frontend/src/`)
+*   [context/MootCourtContext.jsx](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/frontend/src/context/MootCourtContext.jsx) - Global context provider linking UI states to API endpoints.
+*   [components/HomeView.jsx](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/frontend/src/components/HomeView.jsx) - Dashboard displaying the Ashoka Chakra Supreme Court layout and trial flow timeline.
+*   [components/JudgeSimulation.jsx](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/frontend/src/components/JudgeSimulation.jsx) - Courtroom simulator managing judge messages and browser text-to-speech speaker toggles.
+*   [components/AdminDashboard.jsx](file:///c:/Users/archa/Desktop/Mootcourt%20AI%20-%20Copy/backend1/frontend/src/components/AdminDashboard.jsx) - Administrator portal displaying user ledgers and status toggles.
